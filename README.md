@@ -20,3 +20,10 @@ La suite contient différentes méthodes expérimentée pour arriver à le faire
 * openpyxl
 * copy
 * math
+
+# Démarche de test
+
+Cliquer sur le bouton "Informations sur les isotopes".
+Deux fenêtres s'ouvriront, la première permettra de sélectionner un fichier dans le dossier abondance.
+Le seul fichier pour le moment contient les abondances naturelles.
+Ouvrez-le, vérifiez que vous pouvez taper quelque chose puis supprimez vos modifications avant de "Valider".
