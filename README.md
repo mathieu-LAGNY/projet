@@ -11,3 +11,12 @@ Dans le dossier "build", il faudra copier le repertoire "abondances" qui contien
 
 Jusqu'à la ligne 20 se trouve le code que j'ai utilisé pour la version Ubuntu qui fonctionne.
 La suite contient différentes méthodes expérimentée pour arriver à le faire marcher sous windows, mais pour l'instant rien ne marche.
+
+# Bibliothèques python utilisées
+
+* matplotlib
+* tkinter
+* pylab
+* openpyxl
+* copy
+* math
