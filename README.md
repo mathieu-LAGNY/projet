@@ -7,11 +7,6 @@ Pour l'utiliser, il faut lancer la commande "python setup.py build" dans le rép
 Un dossier "build" se trouvera ensuite dans ce répertoire. 
 Dans le dossier "build", il faudra copier le repertoire "abondances" qui contient un petit fichier texte pour faire fonctionner la version actuelle du programme. 
 
-# setup.py
-
-Jusqu'à la ligne 20 se trouve le code que j'ai utilisé pour la version Ubuntu qui fonctionne.
-La suite contient différentes méthodes expérimentée pour arriver à le faire marcher sous windows, mais pour l'instant rien ne marche.
-
 # Bibliothèques python utilisées
 
 * matplotlib
@@ -20,10 +15,3 @@ La suite contient différentes méthodes expérimentée pour arriver à le faire
 * openpyxl
 * copy
 * math
-
-# Démarche de test
-
-Cliquer sur le bouton "Informations sur les isotopes".
-Deux fenêtres s'ouvriront, la première permettra de sélectionner un fichier dans le dossier abondance.
-Le seul fichier pour le moment contient les abondances naturelles.
-Ouvrez-le, vérifiez que vous pouvez taper quelque chose puis supprimez vos modifications avant de "Valider".
