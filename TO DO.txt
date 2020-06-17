@@ -6,8 +6,12 @@ onglets : calcul direct et inverse
 
 Niveau de résolution permettant de séparer les pics avec 2 ou 3 nucléons de plus
 
+ajouter la multiplicité des pics
+
 Tableau périodique
 Somme des isotopes à 100%
+
+importation du spectre : choisir les zones intéressantes
 
 Affichage du spectre de masse en image
 Main sur l'axe des abscisses
