@@ -29,7 +29,7 @@ def TriProbas(L):
             L=L[0:j+1]+[L[i]]+L[j+1:i]+L[i+1:]
     return(L)
 
-def regroupement(L,M,sensibilite):
+def regroupementavecmultiplicite(L,M,sensibilite):
 #    print(M)
 #    print(L)
     seuil=sensibilite*M[0][1]*L[0][1]
@@ -37,11 +37,30 @@ def regroupement(L,M,sensibilite):
     for i in range(len(L)):
         j=0
         while j<len(M) and L[i][1]*M[j][1]>seuil:
-            N.append([L[i][0]+M[j][0],L[i][1]*M[j][1]])
+            N.append([L[i][0]+M[j][0],L[i][1]*M[j][1],L[i][2]*M[j][2]])
             j=j+1
     return TriProbas(N)
 
-def deresolution(K,resolution):
+def deresolution1(K,resolution):
+#   print('appel de deresolution')
+    S=TriMasse(K)
+    for z in range(len(S)):
+        S[z].append(1)
+    Lng=len(S)-1
+    for i in range(len(S)-1):
+        indice=Lng-i
+        if S[indice][0]-S[indice-1][0]<resolution:
+#        on calcule (en deux étapes!) la masse du couple regroupé
+#        (en tenant compte des probabilités respectives)
+            masseponderee=(S[indice][1]*S[indice][0]+S[indice-1][1]*S[indice-1][0])
+            probatotale=S[indice][1]+S[indice-1][1]
+            massemoyenne=masseponderee/probatotale
+            multiplicite=S[indice][2]+S[indice-1][2]
+#        et on réduit notre liste:
+            S=S[0:indice-1]+[[massemoyenne,probatotale,multiplicite]]+S[indice+1:]
+    return TriMasse(S)
+
+def deresolution2(K,resolution):
 #   print('appel de deresolution')
     S=TriMasse(K)
     Lng=len(S)-1
@@ -53,8 +72,9 @@ def deresolution(K,resolution):
             masseponderee=(S[indice][1]*S[indice][0]+S[indice-1][1]*S[indice-1][0])
             probatotale=S[indice][1]+S[indice-1][1]
             massemoyenne=masseponderee/probatotale
+            multiplicite=S[indice][2]+S[indice-1][2]
 #        et on réduit notre liste:
-            S=S[0:indice-1]+[[massemoyenne,probatotale]]+S[indice+1:]
+            S=S[0:indice-1]+[[massemoyenne,probatotale,multiplicite]]+S[indice+1:]
     return TriMasse(S)
 
 def celluleprime(atome,configmere,rang,probamere,sensibilite):
@@ -170,7 +190,7 @@ def Base100(liste):
     return(resultat)
 
 def calculdirect(molecule,resolution,sensibilite):
-    spectre=[[0,1]]
+    spectre=[[0,1,1]]
     for indice in range(0,len(molecule)):
         LISTE=TriProbas(molecule[indice][0])
         configurationdepart=recherchemax(LISTE,molecule[indice][1])
@@ -181,7 +201,11 @@ def calculdirect(molecule,resolution,sensibilite):
                 departcellule[-1][2]=False
         seuil=sensibilite
         sortie=celluleprime(molecule[indice][0],departcellule,0,1,sensibilite)
-        sortie=deresolution(sortie,resolution)
-        spectre=regroupement(spectre,TriProbas(sortie),sensibilite)
-        spectre=deresolution(spectre,resolution)
+        sortie=deresolution1(sortie,resolution)
+        spectre=regroupementavecmultiplicite(spectre,TriProbas(sortie),sensibilite)
+        spectre=deresolution2(spectre,resolution)
     return TriMasse(Base100(spectre))
+molecule = [[[[12.0, 100.0], [13.0033548378, 1.0815728292732234]], 13], [[[1.00782503207, 100.0], [2.0141017778, 0.011501322652104991]], 17], [[[15.99491461956, 100.0], [16.9991317, 0.03809256493278667], [17.999161, 0.20549936345319125]], 2]]
+resolution = 0.1
+sensibilite = 0.00001
+#print(calculdirect(molecule,resolution,sensibilite))

@@ -43,14 +43,12 @@ def inf_aff():
     #.............................................................................
     #E         none
     #Action    Permet l'affichage des valeurs
-    #S         none 
+    #S         none
     def afficher_document():
         filename = askopenfilename(initialdir="./../abondances",title="Select file",\
                                    filetypes=[('txt files','.txt'),('all files','.*')])
-        fichier = open(filename, "r")
-        content = fichier.read()
+        content = Main.upload_abondances(filename)
         ecran(content)
-        fichier.close()
     #.............................................................................
     
     #.............................................................................
@@ -73,12 +71,26 @@ def inf_aff():
 
 #.............................................................................
 #E         none
+#Action    Permet l'importation d'un spectre
+#S         none
+def imp_spectre():
+    
+    filename = askopenfilename(initialdir="./../",title="Select file",\
+                               filetypes=[('txt files','.txt'),('all files','.*')])
+    print(filename)
+    
+
+    return 0
+#.............................................................................
+
+#.............................................................................
+#E         none
 #Action    Permet l'affichage du diagramme dans une fenêtre
 #S         none   
 def display_diag(result):
     
     diag = Tk()
-    diag.title('Diagramme des résultats')
+    diag.title('Results Chart')
     
     fig = plt.figure()
 
@@ -104,48 +116,53 @@ def display_diag(result):
 #.............................................................................
 #E         none
 #Action    Permet de lancer la lecture, le calcul et l'affichage des résultats
-#S         none    print(calculdirect(lecture_FB("C257H383O77N65S6"),0.1,0.1))
+#S         Renvoie le Widget contenant le résultat    print(calculdirect(lecture_FB("C257H383O77N65S6"),0.1,0.1))
 def valid():
     
-    if Efb.get() != "":
-        molecule = Main.lecture_FB(Efb.get())
+    abondances = Main.upload_abondances()
 
-        abondances = Main.upload_abondances()
+    molecule = Main.lecture_FB(Efb.get())
       
-        result = Main.triInsert(calculdirect(molecule,0.1,0.1),int(tri.get()))
+    sensibilite = float(Esen.get())
+    resolution = float(Eres.get())
+    
+    result = Main.triInsert(calculdirect(molecule,sensibilite,resolution),int(tri.get()))
+    
+    for w in w_result:
+        w.destroy()
+    Ftab = tkinter.LabelFrame(racine0,text='Results for '+Efb.get(),padx=10,pady=10)
+    Ftab.grid(row=5,column=1,columnspan=2,padx=10,pady=20)
+    w_result.append(Ftab)
    
-        Ftab = tkinter.LabelFrame(direct,text='Résultat pour '+Efb.get(),padx=10,pady=10)
-        Ftab.grid(row=5,column=1,columnspan=2,padx=10,pady=20)
-        lm = tkinter.Label(Ftab,text='Masse',padx=10,pady=10)
-        lm.grid(row=1,column=1)
-        lp = tkinter.Label(Ftab,text='Probabilité',padx=10,pady=10)
-        lp.grid(row=1,column=2)
+    lm = tkinter.Label(Ftab,text='Mass',padx=10,pady=10)
+    lm.grid(row=1,column=1)
+    w_result.append(lm)
     
-        for i in range (len(result)):
-            for j in range (0,2):
-                label = tkinter.Label(Ftab,text=result[i][j],padx=10)
-                label.grid(row=i+2,column=j+1)
+    lp = tkinter.Label(Ftab,text='Relative intensity',padx=10,pady=10)
+    lp.grid(row=1,column=2)
+    w_result.append(lp)
     
-        Fexp1 = tkinter.LabelFrame(direct,text='Exportation en .xls',padx=10,pady=10)
-        Fexp1.grid(row=7,column=1,padx=10,pady=20)
-        txls = tkinter.Label(Fexp1,text='Entrer le nom du fichier') 
-        txls.grid(row=1,column=1,columnspan=2)
-        exls = tkinter.Entry(Fexp1)
-        exls.grid(row=2,column=1)
-        bxls = tkinter.Button(Fexp1,text='Valider',command = lambda: xls_management.export_xls(result,exls.get()))
-        bxls.grid(row=2,column=2)
+    for i in range (len(result)):
+        for j in range (0,2):
+            label = tkinter.Label(Ftab,text=result[i][j],padx=10)
+            label.grid(row=i+2,column=j+1)
+            w_result.append(label)
     
-        Fexp2 = tkinter.LabelFrame(direct,text='Exportation en .png', padx=10, pady=10)
-        Fexp2.grid(row=7,column=2,padx=10,pady=20)
-        tpng = tkinter.Label(Fexp2,text='Entrer le nom du fichier') 
-        tpng.grid(row=1,column=1,columnspan=2)
-        epng = tkinter.Entry(Fexp2)
-        epng.grid(row=2,column=1)
-        bpng = tkinter.Button(Fexp2,text='Valider',command = lambda: png_management.export_diag(result,epng.get()))
-        bpng.grid(row=2,column=2)
-        spng = tkinter.Button(Fexp2,text='Voir',command = lambda: display_diag(result),width=20)
-        spng.grid(row=3,column=1,columnspan=2,pady=5)
+    item1.delete(0)
+    item1.delete(0)
+    item1.add_command(label=".xls file", command=lambda : save_spectre_xls(result))
+    item1.add_command(label=".png file", command=lambda : save_spectre_png(result))
 #.............................................................................
+
+def save_spectre_xls(spectre):
+    filename = asksaveasfilename(initialdir="./../",title="Save as xls file",\
+                                 filetypes=[('xls files','.xls'),('all files','.*')])
+    xls_management.export_xls(spectre,filename)
+    
+def save_spectre_png(spectre):
+    filename = asksaveasfilename(initialdir="./../",title="Save as png file",\
+                                 filetypes=[('png files','.png'),('all files','.*')])
+    png_management.export_diag(spectre,filename)
 
 "-------------------------------------------------------------"
 
@@ -153,51 +170,93 @@ def valid():
 
 ######################################################
 
-### Fenêtre pour la partie <Direct> ###
-direct = tkinter.Tk()
-direct.title('Spectromètre de masse - Direct')
+### Fenêtre principale ###
+racine0 = tkinter.Tk()
+racine0.title('Mass Spectrometer')
 
 ######################################################
+
+# Menu #
+
+sysdemenu0=tkinter.Menu(racine0) # Creation du systeme de menu
+
+menu1=tkinter.Menu(sysdemenu0, tearoff="0") # Creation du premier menu:
+sysdemenu0.add_cascade(label="File", menu=menu1)
+
+# addition des deux items pour le premier menu et leur commande associee
+menu1.add_command(label="Import spectrum", command=valid)
+
+menu2=tkinter.Menu(sysdemenu0) # Creation du second menu
+sysdemenu0.add_cascade(label="Menu 2", menu=menu2)
+
+# addition du premier item pour le second menu et leur sous-items associes
+item1=tkinter.Menu(menu1, tearoff="0")
+menu1.add_cascade(label="Save as", menu=item1)
+
+# addition des sous-items du premier item du second menu et leur commande associee
+item1.add_command(label=".xls file", state='disabled')
+item1.add_command(label=".png file", state='disabled')
+
+item2=tkinter.Menu(menu2) # addition du second item pour le second menu et leur sous-items associes
+menu2.add_cascade(label="Item 2", menu=item2)
+
+# addition des sous-items du second item du second menu et leur commande associee
+item2.add_command(label="Action 1", command=valid)
+item2.add_command(label="Action 2", command=valid)
+item2.add_command(label="Action 3", command=valid)
+racine0.config(menu=sysdemenu0)
 
 ######################################################
 
 # Frame des options #
-F2d = tkinter.LabelFrame(direct,text='Option',padx=10,pady=10)
+F2d = tkinter.LabelFrame(racine0,text='Option',padx=10,pady=10)
 F2d.grid(row=2,column=1,columnspan=2)
 
-Binf = tkinter.Button(F2d,text='Informations sur les Isotopes',command=inf_aff)
+Binf = tkinter.Button(F2d,text='Information on Isotopes',command=inf_aff)
 Binf.grid(row=3,column=1)
 
 ######################################################
 
+Ftab = tkinter.LabelFrame(racine0,text='Results for ',padx=10,pady=10)
+Ftab.grid_forget()
+w_result = []
+
+######################################################
+
 # Frames de sélection #
-Fs1 = tkinter.LabelFrame(direct,text='Sélection',padx=10,pady=10)
+Fs1 = tkinter.LabelFrame(racine0,text='Selection',padx=10,pady=10)
 Fs1.grid(row=4,column=1,columnspan=2,padx=10,pady=10)
 
-Lfb = tkinter.Label(Fs1,text='Formule brute',padx=20)
+Lfb = tkinter.Label(Fs1,text='Molecular formula',padx=20)
 Lfb.grid(row=1,column=1)
 Efb = tkinter.Entry(Fs1)
 Efb.grid(row=1,column=2,columnspan=2,padx=20)
 
-Larr1 = tkinter.Label(Fs1,text='Quantité minimale',padx=20) 
-Larr1.grid(row=2,column=1)
-Earr1 = tkinter.Entry(Fs1)
-Earr1.insert(0,'0.0001')
-Earr1.grid(row=2,column=2,columnspan=2,padx=20)
+Lsen = tkinter.Label(Fs1,text='Sensibility (or sensitivity ?)',padx=20) 
+Lsen.grid(row=2,column=1)
+Esen = tkinter.Entry(Fs1)
+Esen.insert(0,'0.1')
+Esen.grid(row=2,column=2,columnspan=2,padx=20)
 
-Bval = tkinter.Button(Fs1,text='Valider',command=valid)
-Bval.grid(row=3,column=1)
+Lres = tkinter.Label(Fs1,text='Resolution',padx=20) 
+Lres.grid(row=3,column=1)
+Eres = tkinter.Entry(Fs1)
+Eres.insert(0,'0.00001')
+Eres.grid(row=3,column=2,columnspan=2,padx=20)
+
+Bval = tkinter.Button(Fs1,text='Compute',command=valid)
+Bval.grid(row=4,column=1)
 
 ######################################################
 
 # Partie de validation #
-F4d = tkinter.LabelFrame(direct,text='Validation',padx=10,pady=10)
+F4d = tkinter.LabelFrame(racine0,text='Validation',padx=10,pady=10)
 F4d.grid(row=6,column=1,columnspan=2,padx=10,pady=10)
 
 tri = tkinter.IntVar()
-Rom = tkinter.Radiobutton(F4d,text="Ordre des Masses",variable=tri,value=0,indicatoron=0,command=valid,width=20)
+Rom = tkinter.Radiobutton(F4d,text="Mass order",variable=tri,value=0,indicatoron=0,command=valid,width=20)
 Rom.grid(row=1,column=1)
-Roi = tkinter.Radiobutton(F4d,text="Ordre des Probabilités",variable=tri,value=1,indicatoron=0,command=valid,width=20)
+Roi = tkinter.Radiobutton(F4d,text="Relative intensity order",variable=tri,value=1,indicatoron=0,command=valid,width=20)
 Roi.grid(row=2,column=1)
 
 ######################################################
@@ -206,6 +265,6 @@ Roi.grid(row=2,column=1)
 
 """Mise en place du tkinter"""
 
-direct.mainloop()
+racine0.mainloop()
 
 "-------------------------------------------------------------"

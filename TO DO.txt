@@ -1,0 +1,47 @@
+Même nombre de chiffres significatifs partout
+
+Importation, récupérer uniquement la partie zoomée
+
+Pour Alain : Pouvoir différencier les deux oxygènes 3= * 2 ou 4
+
+onglets : calcul direct et inverse
+
+Niveau de résolution permettant de séparer les pics avec 2 ou 3 nucléons de plus
+
+Abondances : 
+Vérifier les valeurs+
+
+Tableau périodique
+Somme des isotopes à 100%
+
+Affichage du spectre de masse en image
+Main sur l'axe des abscisses
+changer l'ordre croissant plutôt que décroissant
+
+Exportation en .png
+Valeurs numériques coupées
+
+Résolution : 
+Intensité : Rapport entre l'intensité du pic par rapport au pic le plus probable
+
+INFO :
+
+seuils de sensibilité changent l'intensité des pics
+différence entre la sensibilité pour le calcul et l'affichage
+agrégation des molécules avec une masse proche
+molécules en petite quantité
+si on fait baisser la sensibilité (mailleure sensibilité)
+si la sensibilité dans le programme est trop élevée, -> problème
+
+le calcul est fait avec autant de chiffres significatis que l'on veut
+puis l'on regroupe les pics avec des masses trop proches et ajoute les intensités
+quand on a des pics mutuellement proches mais l'on ne sait pas si les pics sont les mêmes
+seuil de résolution qui soit différent de distance entre les pics
+s'il y a un pic fait d'une multitude de pics trops faibles
+3 ou 4 nucléons de plus que la résolution la plus faible ?
+
+DONE :
+
+Changer : Probabilité -> intensité relative
+
+Plus grand vers le plus petit 
