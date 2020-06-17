@@ -1,15 +1,10 @@
 Même nombre de chiffres significatifs partout
 
-Importation, récupérer uniquement la partie zoomée
-
 Pour Alain : Pouvoir différencier les deux oxygènes 3= * 2 ou 4
 
 onglets : calcul direct et inverse
 
 Niveau de résolution permettant de séparer les pics avec 2 ou 3 nucléons de plus
-
-Abondances : 
-Vérifier les valeurs+
 
 Tableau périodique
 Somme des isotopes à 100%
@@ -44,4 +39,9 @@ DONE :
 
 Changer : Probabilité -> intensité relative
 
-Plus grand vers le plus petit 
+Plus grand vers le plus petit
+
+Importation, récupérer uniquement la partie zoomée
+
+Abondances : 
+Vérifier les valeurs+
