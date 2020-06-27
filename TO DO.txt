@@ -1,29 +1,11 @@
-Même nombre de chiffres significatifs partout
+Abondences: 
+- Tableau périodique
+- Somme des isotopes à 100%
 
-Pour Alain : Pouvoir différencier les deux oxygènes 3= * 2 ou 4
-
-onglets : calcul direct et inverse
-
-Niveau de résolution permettant de séparer les pics avec 2 ou 3 nucléons de plus
-
-ajouter la multiplicité des pics
-
-Tableau périodique
-Somme des isotopes à 100%
-
-importation du spectre : choisir les zones intéressantes
-
-Affichage du spectre de masse en image
-Main sur l'axe des abscisses
-changer l'ordre croissant plutôt que décroissant
-
-Exportation en .png
-Valeurs numériques coupées
+INFO :
 
 Résolution : 
 Intensité : Rapport entre l'intensité du pic par rapport au pic le plus probable
-
-INFO :
 
 seuils de sensibilité changent l'intensité des pics
 différence entre la sensibilité pour le calcul et l'affichage
@@ -39,13 +21,29 @@ seuil de résolution qui soit différent de distance entre les pics
 s'il y a un pic fait d'une multitude de pics trops faibles
 3 ou 4 nucléons de plus que la résolution la plus faible ?
 
+TO CHECK :
+
+Même nombre de chiffres significatifs partout
+
+Niveau de résolution permettant de séparer les pics avec 2 ou 3 nucléons de plus
+
 DONE :
 
 Changer : Probabilité -> intensité relative
 
-Plus grand vers le plus petit
+Plus grand vers le plus petit 
 
 Importation, récupérer uniquement la partie zoomée
 
-Abondances : 
-Vérifier les valeurs+
+Pour Alain : Pouvoir différencier les deux oxygènes 3= * 2 ou 4
+
+onglets : calcul direct et inverse
+
+Abondances : Vérifier les valeurs+
+
+Affichage du spectre de masse en image
+Main sur l'axe des abscisses
+changer l'ordre croissant plutôt que décroissant
+
+Exportation en .png
+Valeurs numériques coupées

@@ -15,26 +15,37 @@ import matplotlib.pyplot as plt
 #          name, le nom du fichier à exporter
 #Action    Permet d'exporter les résultats sur un graphes en format png
 #S         none
-def export_diag(result,name):
+def export_diag(result,name,formule_brute):
+      
+    fig, ax = plt.subplots()
     
-    fig = plt.figure()
+    ax.set_title("Calcul direct de "+formule_brute)
 
     x = [result[i][0] for i in range (len(result))]
     height = [result[i][1] for i in range (len(result))]
     width = 0.02
-    BarName = [str(result[i][0]) for i in range (len(result))]
     
-    plt.bar(x, height, width, color='blue')
+    columns = plt.bar(x, height, width, color='blue')
     
-    plt.xlim(min(x)-0.2,max(x)+0.2)
-    plt.ylim(0,max(height)+0.1)
+    plt.xlim(min(x)-1,max(x)+1)
+    plt.ylim(0,110)
     
-    plt.title(name)
-    
-    pylab.xticks(x, BarName, rotation=40)
+    def autolabel(columns):
+        """Attach a text label above each column in *columns*, displaying its height."""
+        for column in columns:
+            label = str(round(column.get_x(),2))+" ; "+str(round(column.get_height(),0))
+            if round(column.get_height(),0) == 0:
+                label = round(column.get_x(),2)
+            ax.annotate('{}'.format(label),
+                        xy=(column.get_x(), column.get_height()),
+                        xytext=(0, 3),  # 3 points vertical offset
+                        textcoords="offset points",
+                        ha='center', va='bottom')
+            
+    autolabel(columns)
     
     try :
-        plt.savefig('../'+name+'.png')
+        plt.savefig('../'+name)
     except :
-        plt.savefig(name+'.png')
+        plt.savefig(name)
 #.............................................................................

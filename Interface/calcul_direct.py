@@ -205,7 +205,8 @@ def calculdirect(molecule,resolution,sensibilite):
         spectre=regroupementavecmultiplicite(spectre,TriProbas(sortie),sensibilite)
         spectre=deresolution2(spectre,resolution)
     return TriMasse(Base100(spectre))
-molecule = [[[[12.0, 100.0], [13.0033548378, 1.0815728292732234]], 13], [[[1.00782503207, 100.0], [2.0141017778, 0.011501322652104991]], 17], [[[15.99491461956, 100.0], [16.9991317, 0.03809256493278667], [17.999161, 0.20549936345319125]], 2]]
-resolution = 0.1
-sensibilite = 0.00001
+
+#molecule = [[[[12.0, 100.0], [13.0033548378, 1.0815728292732234]], 13], [[[1.00782503207, 100.0], [2.0141017778, 0.011501322652104991]], 17], [[[15.99491461956, 100.0], [16.9991317, 0.03809256493278667], [17.999161, 0.20549936345319125]], 2]]
+#resolution = 0.1
+#sensibilite = 0.00001
 #print(calculdirect(molecule,resolution,sensibilite))

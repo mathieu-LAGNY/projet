@@ -156,12 +156,25 @@ def triInsert(result,t):
     for i in range (1,n):
         x = new_result[i]
         j = i
-        while ((j > 0) and new_result[j-1][t] < x[t]):
+        while ((j > 0) and new_result[j-1][t] > x[t]):
             new_result[j] = new_result[j-1]
             j = j-1
         new_result[j] = x
 
     return new_result
+#.............................................................................
+
+#.............................................................................
+#E         result, la liste de tout les résultats
+#Action    Passer d'une liste où la valeur la plus élevée est 100 à une liste où le total est 100
+#S         new_result, la liste traitée de tout les résultats
+def relatif_to_total(result):
+    total = 0.
+    for ligne in result:
+        total += ligne[1]
+    for ligne in result:
+        ligne[1] = 100*ligne[1]/total
+    return result
 #.............................................................................
 
 "-------------------------------------------------------------"
@@ -187,10 +200,14 @@ def convertir_puissances(chaine):
 #Action    Permet de récupérer les valeurs zommée d'un spectre depuis un fichier texte
 #S         abondances,  un dictionnaire dont les indices sont les symboles chimiques des atomes
 def upload_spectrum(filename="./../spectrum_list.txt"):
-    with open(filename, encoding='utf-16') as f:
-        tableau = f.read()
+    try:
+        with open(filename, encoding='utf-16') as f:
+            tableau = f.read()
+    except:
+        with open(filename, "r") as f:
+            tableau = f.read()
     f.close()
-    tableau = tableau.split("\n")
+    tableau = tableau.split("\n")[3:]
 
     # On enlève d'abord tous les espaces
     for i in range(len(tableau)):
