@@ -6,6 +6,8 @@ Pour faire une version standalone, j'ai utilisé cx_Freeze avec le fichier setup
 Pour l'utiliser, il faut lancer la commande "python setup.py build" dans le répertoire Interface. 
 Un dossier "build" se trouvera ensuite dans ce répertoire. 
 Dans le dossier "build", il faudra copier le repertoire "abondances" qui contient un petit fichier texte pour faire fonctionner la version actuelle du programme. 
+Il est nécessaire d'avoir une installation de python avec tout les modules nécessaires pour chaque système d'exploitation pour lequel on souhaite faire une version standalone. Jusqu'ici, seuls une version ubuntu et windows 10 ont été réalisées. 
+
 
 # Bibliothèques python utilisées
 
