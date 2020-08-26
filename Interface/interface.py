@@ -5,13 +5,15 @@ Created on Thu May 14 11:40:48 2020
 
 @author: mathieu
 """
+import matplotlib.pyplot as plt
+import pylab
+from functools import partial
+
 import tkinter
 from tkinter import ttk 
 from tkinter import messagebox
 from tkinter.filedialog import *
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-import matplotlib.pyplot as plt
-import pylab
 
 import Main
 from calcul_direct import calculdirect
@@ -32,29 +34,85 @@ def inf_aff():
     
     racine_abondance = tkinter.Tk()
     racine_abondance.title('Isotope Information')
-
-    txt_abondance=tkinter.Text(racine_abondance) # prevoit une place pour l'affichage des textes
-    txt_abondance.pack()
-  
-    #.............................................................................
-    #E         Une chaîne de caractères
-    #Action    Permet d'afficher des valeurs
-    #S         none    
-    def ecran(var):
-        txt_abondance.insert(tkinter.END, var)
-    #.............................................................................
     
-    #.............................................................................
-    #E         none
+    racine_abondance.bind('<Escape>', lambda e: racine_abondance.destroy())
+    
+        #.............................................................................
+    #E         adresse du fichier contenant les abondances relatives
     #Action    Permet l'affichage des valeurs
     #S         none
-    def afficher_document():
-        filename = askopenfilename(initialdir="./../abondances",title="Select file",\
-                                   filetypes=[('txt files','.txt'),('all files','.*')])
+    def afficher_document(filename="./../abondances/abondances.txt"):
         content = Main.upload_abondances(filename)
-        ecran(content)
+        
+        def fenetre_atome(abondances,atome):
+
+            tab_info = abondances[atome]
+            
+            racine_atome = tkinter.Tk()
+            racine_atome.title(atome+' Information')
+            
+            def save_atome():
+                i = 0
+                total = 0
+                for entry in tab_entry:
+                    tab_info_relatif[i][0] = float(entry.get())
+                    total +=  float(entry.get())
+                    i += 1
+                if total < 100.1 and total > 99.9:
+                    tab_info = tab_info_relatif
+                else:
+                    fenetre = messagebox.showinfo("Incorrect argument","The sum of isotopic abundances must be equal to 100.")
+                racine_atome.destroy()
+            
+            racine_atome.bind('<Escape>', save_atome)
+            
+            tab_info_relatif = Main.relatif_to_total(tab_info)
+            
+            lm = tkinter.Label(racine_atome,text='Isotope',padx=10,pady=10)
+            lm.grid(row=1,column=1)
+            
+            lia = tkinter.Label(racine_atome,text='Isotopic Abundance',padx=10,pady=10)
+            lia.grid(row=1,column=2)
+            
+            tab_entry = []
+            
+            for i in range (len(tab_info_relatif)):
+                label = tkinter.Label(racine_atome,text=atome+str(round(tab_info_relatif[i][0])),padx=10)
+                label.grid(row=i+2,column=1)
+                
+                entry = tkinter.Entry(racine_atome)
+                entry.grid(row=i+2,column=2)
+                entry.insert(0,str(tab_info_relatif[i][1]))
+                
+                tab_entry.append(entry)
+            
+            Bouton_validation = tkinter.Button(racine_atome,text='Validate',command=save_atome,padx=100)
+            Bouton_validation.grid(row=len(tab_info_relatif)+3,columnspan=3)
+            
+        
+        tableau = [["H","","","","","","","","","","","","","","","","","He"],\
+                   ["Li","Be","","","","","","","","","","","B","C","N","O","F","Ne"],\
+                   ["Na","Mg","","","","","","","","","","","Al","Si","P","S","Cl","Ar"],\
+                   ["K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr"],\
+                   ["Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe"],\
+                   ["Cs","Ba","57-71","Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn"],\
+                   ["Fr","Ra","89-103","Rf","Db","Sg","Bh","Hs","Mt","Ds","Rg","Cn","Uut","Fl","Uup","Lv","Ts","Og"],\
+                   ["","","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu"],\
+                   ["","","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm","Md","No","Lr"]]
+        
+        for i in range(len(tableau)):
+            for j in range(len(tableau[i])):
+                if tableau[i][j] != "":
+                    Button(racine_abondance,text=tableau[i][j],command=partial(fenetre_atome,content,tableau[i][j]), width=2,height=1).grid(row=i, column=j)
+
     #.............................................................................
     
+    def changer_document():
+        filename = askopenfilename(initialdir="./../abondances",title="Select file",\
+                                   filetypes=[('txt files','.txt'),('all files','.*')])
+        if filename != ():
+            afficher_document(filename)
+            
     #.............................................................................
     #E         none
     #Action    Permet l'enregistrement des nouvelles valeurs dans un fichier texte
@@ -68,9 +126,19 @@ def inf_aff():
         racine_abondance.destroy()
     #.............................................................................
     
+    menu_abondance=tkinter.Menu(racine_abondance) # Creation du systeme de menu
+
+    menu1_abondance=tkinter.Menu(menu_abondance, tearoff="0") # Creation du premier menu:
+    menu_abondance.add_cascade(label="File", menu=menu1_abondance)
+
+    menu1_abondance.add_command(label="Upload", command=changer_document)
+    menu1_abondance.add_command(label="Save", command=enregistrer_document)
+    
+    racine_abondance.config(menu=menu_abondance)
+
     afficher_document()
-    Bouton_validation = tkinter.Button(racine_abondance,text='Valider',command=enregistrer_document,padx=100)
-    Bouton_validation.pack()
+    Bouton_validation = tkinter.Button(racine_abondance,text='Validate',command=enregistrer_document,padx=100)
+    Bouton_validation.grid(row=12,columnspan=20,pady=10)
 #.............................................................................
 
 #.............................................................................
@@ -163,7 +231,7 @@ def execute_calcul_direct(racine, formule_brute, resolution, sensibilite, tri,  
             label.grid(row=i+2,column=j+1)
             w_result.append(label)
     
-    menu1.delete(2)
+    menu1.delete(1)
     item1.delete(0)
     item1.delete(0)
     menu1.add_command(label="See Spectrogram", command=lambda : display_diag(result,formule_brute))
@@ -185,7 +253,7 @@ def execute_calcul_inverse(racine, formule_brute, oxygenes, spectre, resolution,
     
     result,estimerreur = problemeinverse(molecule,oxygenes,spectre,resolution,sensibilite)
     result = Main.triInsert(result,tri)
-    result = Main.relatif_to_total(result)    
+    result = Main.relatif_to_total(result)
 
     for w in w_result:
         w.destroy()
@@ -212,12 +280,14 @@ def execute_calcul_inverse(racine, formule_brute, oxygenes, spectre, resolution,
 def save_spectre_xls(spectre):
     filename = asksaveasfilename(initialdir="./../",title="Save as xls file",\
                                  filetypes=[('xls files','.xls'),('all files','.*')])
-    xls_management.export_xls(spectre,filename)
+    if filename != ():
+        xls_management.export_xls(spectre,filename)
     
 def save_spectre_png(spectre,formule_brute):
     filename = asksaveasfilename(initialdir="./../",title="Save as png file",\
                                  filetypes=[('png files','.png'),('all files','.*')])
-    png_management.export_diag(spectre,filename,formule_brute)
+    if filename != ():
+        png_management.export_diag(spectre,filename,formule_brute)
 
 #.............................................................................
     
@@ -238,13 +308,13 @@ def direct_tab(racine):
     Efb.grid(row=1,column=2,columnspan=2,padx=20)
     
     Lres = tkinter.Label(Fs1,text='Resolution',padx=20) 
-    Lres.grid(row=3,column=1)
+    Lres.grid(row=2,column=1)
     Eres = tkinter.Entry(Fs1)
     Eres.insert(0,'0.1')
     Eres.grid(row=2,column=2,columnspan=2,padx=20)
     
     Lsen = tkinter.Label(Fs1,text='Sensitivity',padx=20) 
-    Lsen.grid(row=2,column=1)
+    Lsen.grid(row=3,column=1)
     Esen = tkinter.Entry(Fs1)
     Esen.insert(0,'0.00001')
     Esen.grid(row=3,column=2,columnspan=2,padx=20)
@@ -280,9 +350,11 @@ def inverse_tab(racine):
         execute_calcul_inverse(racine,Efb.get(),oxygen,spectre,Eres.get(),Esen.get(),tri.get(),w_result)
         
     def imp_spectre():
+        Espc.delete(0,len(Espc.get()))
         filename = askopenfilename(initialdir="./../",title="Select file",\
                                    filetypes=[('txt files','.txt'),('all files','.*')])
-        Espc.insert(0,filename)
+        if filename != ():
+            Espc.insert(0,filename)
     
     # Frames de sélection #
     Fs1 = tkinter.LabelFrame(racine,text='Selection',padx=10,pady=10)
@@ -294,13 +366,13 @@ def inverse_tab(racine):
     Efb.grid(row=1,column=2,columnspan=2,padx=20)
     
     Lres = tkinter.Label(Fs1,text='Resolution',padx=20) 
-    Lres.grid(row=3,column=1)
+    Lres.grid(row=2,column=1)
     Eres = tkinter.Entry(Fs1)
     Eres.insert(0,'0.1')
     Eres.grid(row=2,column=2,columnspan=2,padx=20)
     
     Lsen = tkinter.Label(Fs1,text='Sensitivity',padx=20) 
-    Lsen.grid(row=2,column=1)
+    Lsen.grid(row=3,column=1)
     Esen = tkinter.Entry(Fs1)
     Esen.insert(0,'0.00001')
     Esen.grid(row=3,column=2,columnspan=2,padx=20)

@@ -167,7 +167,7 @@ def triInsert(result,t):
 #.............................................................................
 #E         result, la liste de tout les résultats
 #Action    Passer d'une liste où la valeur la plus élevée est 100 à une liste où le total est 100
-#S         new_result, la liste traitée de tout les résultats
+#S         la liste traitée de tout les résultats
 def relatif_to_total(result):
     total = 0.
     for ligne in result:
@@ -176,6 +176,21 @@ def relatif_to_total(result):
         ligne[1] = 100*ligne[1]/total
     return result
 #.............................................................................
+
+#.............................................................................
+#E         result, la liste de tout les résultats
+#Action    Passer d'une liste où le total est 100 à une liste où la valeur la plus élevée est 100 
+#S         liste traitée de tout les résultats
+def total_to_relatif(result):
+    maxi = 0.
+    for ligne in result:
+        if ligne[1] > maxi:
+            maxi = ligne[1]
+    for ligne in result:
+        ligne[1] = 100*ligne[1]/maxi
+    return result
+#.............................................................................
+
 
 "-------------------------------------------------------------"
 

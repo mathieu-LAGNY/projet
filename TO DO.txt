@@ -1,8 +1,4 @@
-Abondences: 
-- Tableau périodique
-- Somme des isotopes à 100%
-
-INFO :
+NOTES DIVERSES :
 
 Résolution : 
 Intensité : Rapport entre l'intensité du pic par rapport au pic le plus probable
@@ -11,13 +7,13 @@ seuils de sensibilité changent l'intensité des pics
 différence entre la sensibilité pour le calcul et l'affichage
 agrégation des molécules avec une masse proche
 molécules en petite quantité
-si on fait baisser la sensibilité (mailleure sensibilité)
+si on fait baisser la sensibilité (meilleure sensibilité)
 si la sensibilité dans le programme est trop élevée, -> problème
 
-le calcul est fait avec autant de chiffres significatis que l'on veut
-puis l'on regroupe les pics avec des masses trop proches et ajoute les intensités
+le calcul est fait avec autant de chiffres significatifs que l'on veut
+puis l'on regroupe les pics avec des masses trop proches et on ajoute les intensités
 quand on a des pics mutuellement proches mais l'on ne sait pas si les pics sont les mêmes
-seuil de résolution qui soit différent de distance entre les pics
+seuil de résolution qui soit différent de la distance entre les pics
 s'il y a un pic fait d'une multitude de pics trops faibles
 3 ou 4 nucléons de plus que la résolution la plus faible ?
 
@@ -47,3 +43,7 @@ changer l'ordre croissant plutôt que décroissant
 
 Exportation en .png
 Valeurs numériques coupées
+
+Abondances: 
+- Tableau périodique
+- Somme des isotopes à 100%
